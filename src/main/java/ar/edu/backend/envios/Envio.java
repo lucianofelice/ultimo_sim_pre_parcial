@@ -18,15 +18,21 @@ public class Envio {
     }
 
     public static Envio desdeCampos(String[] c) {
-        if (c.length != 5) throw new IllegalArgumentException("se esperan 5 columnas");
+        if (c.length != 5 && c.length != 6) throw new IllegalArgumentException("se esperan 5 o 6 columnas");
         int bruto = Integer.parseInt(c[2]);
         int embalaje = Integer.parseInt(c[3]);
         if (bruto <= 0 || bruto > 50000 || embalaje < 0 || embalaje >= bruto) {
             throw new IllegalArgumentException("pesos incompatibles: " + c[2] + "/" + c[3]);
         }
-        return new Envio(c[0], c[1], bruto - embalaje);
+        String modalidad = c.length == 5 ? "NORMAL" : c[5];
+        return switch (modalidad) {
+            case "NORMAL" -> new Envio(c[0], c[1], bruto - embalaje);
+            case "PRIORITARIO" -> new EnvioPrioritario(c[0], c[1], bruto - embalaje);
+            default -> throw new IllegalArgumentException("Modalidad desconocida" + modalidad);
+        };
+        //return new Envio(c[0], c[1], bruto - embalaje);
     }
-
+    public String modalidad() {return "NORMAL";}
     public String getId() { return id; }
     public String getZona() { return zona; }
     public int getGramos() { return gramos; }

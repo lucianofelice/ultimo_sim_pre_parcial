@@ -11,14 +11,15 @@ import java.util.List;
 
 public class ParserEnvios {
     private static final String CABECERA = "id,zona,brutoGramos,embalajeGramos,estado";
-
     public ResultadoParseo leer(Path archivo) throws IOException {
         List<Envio> envios = new ArrayList<>();
         List<String> errores = new ArrayList<>();
         List<String> descartes = new ArrayList<>();
         int leidas = 0;
         try (BufferedReader reader = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
-            if (!CABECERA.equals(reader.readLine())) {
+            String cabecera = reader.readLine();
+            int columnas = (CABECERA + ",modalidad").equals(cabecera) ? 6 : 5;
+            if (!CABECERA.equals(cabecera) && columnas !=6) {
                 throw new IllegalArgumentException("encabezado incorrecto");
             }
             String linea;
@@ -27,7 +28,7 @@ public class ParserEnvios {
                 int numero = leidas + 1;
                 try {
                     String[] c = Arrays.stream(linea.split(",", -1)).map(String::strip).toArray(String[]::new);
-                    if (c.length != 5) throw new IllegalArgumentException("cantidad de columnas incorrecta");
+                    if (c.length != columnas) throw new IllegalArgumentException("cantidad de columnas incorrecta");
                     if (c[4].equals("CANCELADO")) {
                         descartes.add("Línea " + numero + ": CANCELADO");
                         continue;
