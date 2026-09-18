@@ -28,7 +28,7 @@ public class Envio {
         return switch (modalidad) {
             case "NORMAL" -> new Envio(c[0], c[1], bruto - embalaje);
             case "PRIORITARIO" -> new EnvioPrioritario(c[0], c[1], bruto - embalaje);
-            default -> throw new IllegalArgumentException("Modalidad desconocida" + modalidad);
+            default -> throw new IllegalArgumentException("Modalidad desconocida: " + modalidad);
         };
         //return new Envio(c[0], c[1], bruto - embalaje);
     }

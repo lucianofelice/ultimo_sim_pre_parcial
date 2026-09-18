@@ -20,6 +20,7 @@ public class CentralEnvios {
     }
     public String panorama() {
         return "Total: " + total() + " | por zona: " + new java.util.TreeMap<>(totalesPorZona())
-                + " | hasta 1000 g: " + filtrar(e -> e.getGramos() <= 1000).size();
+                + " | hasta 1000 g: " + filtrar(e -> e.getGramos() <= 1000).size()
+                + " | por modalidad: " + new java.util.TreeMap<>(cantidadesPorModalidad());
     }
 }
